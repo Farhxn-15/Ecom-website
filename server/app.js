@@ -1,4 +1,6 @@
 const express = require("express");
+const { PrismaClient } = require('@prisma/client'); // Import Prisma Client
+const prisma = new PrismaClient(); // Initialize Prisma Client
 const bcrypt = require('bcryptjs');
 const fileUpload = require("express-fileupload");
 const productsRouter = require("./routes/products");
@@ -36,8 +38,16 @@ app.use('/api/order-product', orderProductRouter);
 app.use("/api/slugs", slugRouter);
 app.use("/api/wishlist", wishlistRouter);
 
+// Add Prisma connection check with emojis 🌐💻
+prisma.$connect()
+  .then(() => {
+    console.log('✅ Database connected successfully! 🎉');
+  })
+  .catch((error) => {
+    console.error('❌ Database connection failed: ', error);
+  });
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT} 🌟`);
 });
